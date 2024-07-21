@@ -1,5 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getComingSoon } from "../utils/fetchers";
+import MovieBoxs from "../components/MovieBoxs";
+import Loader from "../components/Loader";
 
 export default function ComingSoon() {
   const { data, isLoading } = useQuery({
@@ -8,18 +10,12 @@ export default function ComingSoon() {
   });
 
   return (
-    <div>
+    <div className="flex items-center justify-center w-full h-screen">
       {isLoading ? (
-        "Loading..."
-      ) : (
-        <div>
-          {data?.results.map((item) => (
-            <div key={item.id}>
-              <p>{item.title}</p>
-            </div>
-          ))}
-        </div>
-      )}
+        <Loader />
+      ) : data?.results ? (
+        <MovieBoxs movies={data?.results} />
+      ) : null}
     </div>
   );
 }

@@ -1,5 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getPopular } from "../utils/fetchers";
+import MovieBoxs from "../components/MovieBoxs";
+import Loader from "../components/Loader";
 
 export default function Home() {
   const { data, isLoading } = useQuery({
@@ -7,18 +9,12 @@ export default function Home() {
     queryFn: getPopular,
   });
   return (
-    <div>
+    <div className="flex items-center justify-center w-full h-screen">
       {isLoading ? (
-        "Loading..."
-      ) : (
-        <div>
-          {data?.results.map((item) => (
-            <div key={item.id}>
-              <p>{item.title}</p>
-            </div>
-          ))}
-        </div>
-      )}
+        <Loader />
+      ) : data?.results ? (
+        <MovieBoxs movies={data?.results} />
+      ) : null}
     </div>
   );
 }

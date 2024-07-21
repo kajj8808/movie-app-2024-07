@@ -10,6 +10,7 @@ export default function MovieBoxs({ movies }: { movies: IMovie[] }) {
     height: 0,
   });
   const [posterPositions, setPosterPositions] = useState<IPosition[]>([]);
+  const [prevWidth, setPrevWidth] = useState(0);
 
   const updateSize = () => {
     if (containerRef.current) {
@@ -54,7 +55,7 @@ export default function MovieBoxs({ movies }: { movies: IMovie[] }) {
 
   const addNewPosition = () => {
     let attempts = 0;
-    const maxAttempts = 100;
+    const maxAttempts = 300;
 
     while (maxAttempts !== attempts) {
       const newPosition = generateRandomPosition();
@@ -89,9 +90,20 @@ export default function MovieBoxs({ movies }: { movies: IMovie[] }) {
     }
   }, [movies, containerSize, posterPositions]);
 
+  useEffect(() => {
+    if (containerSize.width === 0) {
+      return;
+    }
+    console.log(prevWidth - containerSize.width);
+    if (Math.abs(prevWidth - containerSize.width) > 100) {
+      setPosterPositions([]);
+      setPrevWidth(containerSize.width);
+    }
+  }, [containerSize]);
+
   return (
     <div
-      className="h-[80vh] w-[80vw] flex justify-center items-center"
+      className="h-[79%] w-4/5 flex justify-center items-center mt-[4vh]"
       ref={containerRef}
     >
       {/*   {posterPositions.length > 1 &&
